@@ -1,5 +1,5 @@
 <!--
-  VERSION : v3 - 05/09/2026
+  VERSION : v4 - 07/09/2026
   Cumule :
     - v1 : version initiale (non versionnée formellement)
     - v2 : correction des liens Agenda RDV et Suivi Clients suite au renommage
@@ -7,9 +7,13 @@
     - v3 : les liens des tuiles sont désormais lus depuis liens-igbas.json
       (liste centrale d'adresses) au lieu d'être écrits en dur. Garde les
       adresses actuelles en secours si le fichier central est injoignable.
-  Fichiers precedents : 9715e078.ml-igbas.pages.dev.html, ml-igbas-v2.html
+    - v4 : ajout de 3 tuiles à la suite des 3 existantes (rien retiré) : Aliments & IG,
+      Recettes, et Fiches Infos Produits (tuile "Bientôt", fonctionnalité pas encore
+      construite, non cliquable). Clés data-app "aliments_ig" et "recettes" ajoutées
+      pour une lecture future depuis liens-igbas.json si Bernard les y renseigne.
+  Fichiers precedents : 9715e078.ml-igbas.pages.dev.html, ml-igbas-v2.html, v3 (05/09/2026)
 -->
-<meta name="app-version" content="v3-2026-09-05">
+<meta name="app-version" content="v4-2026-09-07">
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Marie-Laure — IGBas®</title>
@@ -64,11 +68,18 @@ html,body{height:100%;font-family:'Outfit',sans-serif;background:var(--teal-ligh
 .tuile.rdv{border-color:#1D9E75;}
 .tuile.clients{border-color:#085041;}
 .tuile.compta{border-color:#BA7517;}
+.tuile.aliments{border-color:#2d9e85;}
+.tuile.recettes{border-color:#c8973a;}
+.tuile.bientot{border-color:#c8d0cc;opacity:0.65;cursor:default;}
+.tuile.bientot:hover{transform:none;box-shadow:0 4px 20px rgba(0,0,0,0.08);}
 
 .tuile-icone{width:80px;height:80px;border-radius:20px;display:flex;align-items:center;justify-content:center;font-size:40px;flex-shrink:0;}
 .tuile.rdv .tuile-icone{background:#eaf6f0;}
 .tuile.clients .tuile-icone{background:#e0f0ea;}
 .tuile.compta .tuile-icone{background:var(--or-light);}
+.tuile.aliments .tuile-icone{background:#e5f5f0;}
+.tuile.recettes .tuile-icone{background:#fdf3e3;}
+.tuile.bientot .tuile-icone{background:#f0f0ee;}
 
 .tuile-texte{flex:1;}
 .tuile-titre{font-size:30px;font-weight:900;color:var(--text);margin-bottom:4px;}
@@ -77,6 +88,10 @@ html,body{height:100%;font-family:'Outfit',sans-serif;background:var(--teal-ligh
 .tuile.rdv .tuile-arrow{color:#1D9E75;}
 .tuile.clients .tuile-arrow{color:#085041;}
 .tuile.compta .tuile-arrow{color:#BA7517;}
+.tuile.aliments .tuile-arrow{color:#2d9e85;}
+.tuile.recettes .tuile-arrow{color:#c8973a;}
+
+.badge-bientot{display:inline-block;background:#BA7517;color:#fff;font-size:14px;font-weight:700;padding:3px 12px;border-radius:999px;margin-left:8px;vertical-align:middle;}
 
 /* FOOTER */
 .footer{text-align:center;padding:20px 24px 40px;color:var(--text2);font-size:16px;}
@@ -119,7 +134,7 @@ html,body{height:100%;font-family:'Outfit',sans-serif;background:var(--teal-ligh
     <button class="pin-btn del" onclick="pinEffacer()">⌫</button>
   </div>
   <div style="font-size:12px;color:rgba(255,255,255,0.5);margin-top:4px;">
-    ml-igbas — v3 — 05/09/2026 — Validé par Bernard : EN ATTENTE
+    ml-igbas — v4 — 07/09/2026 — Validé par Bernard : EN ATTENTE
   </div>
 </div>
 
@@ -159,12 +174,38 @@ html,body{height:100%;font-family:'Outfit',sans-serif;background:var(--teal-ligh
     <div class="tuile-arrow">→</div>
   </a>
 
+  <a class="tuile aliments" id="lien-aliments-ig" data-app="aliments_ig" href="https://recettes-igbas.pages.dev/gestion-aliments-ig" target="_blank">
+    <div class="tuile-icone">🥗</div>
+    <div class="tuile-texte">
+      <div class="tuile-titre">Aliments &amp; IG</div>
+      <div class="tuile-desc">Créer, corriger ou<br>renommer un aliment et son IG</div>
+    </div>
+    <div class="tuile-arrow">→</div>
+  </a>
+
+  <a class="tuile recettes" id="lien-recettes" data-app="recettes" href="https://recettes-igbas.pages.dev" target="_blank">
+    <div class="tuile-icone">🍽️</div>
+    <div class="tuile-texte">
+      <div class="tuile-titre">Recettes</div>
+      <div class="tuile-desc">Ajouter, modifier ou<br>consulter les recettes</div>
+    </div>
+    <div class="tuile-arrow">→</div>
+  </a>
+
+  <div class="tuile bientot">
+    <div class="tuile-icone">📋</div>
+    <div class="tuile-texte">
+      <div class="tuile-titre">Fiches Infos Produits <span class="badge-bientot">Bientôt</span></div>
+      <div class="tuile-desc">Pas encore disponible</div>
+    </div>
+  </div>
+
 </div>
 
 <div class="footer">
   Géré par Bernard &nbsp;·&nbsp; <a id="lien-dashboard" data-app="dashboard" href="https://dashboard-igbas.pages.dev">Dashboard complet →</a>
   <div style="margin-top:14px;font-size:13px;color:#8a9088;">
-    ml-igbas — v3 — 05/09/2026 — Validé par Bernard : EN ATTENTE
+    ml-igbas — v4 — 07/09/2026 — Validé par Bernard : EN ATTENTE
   </div>
 </div>
 
